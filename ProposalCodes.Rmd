@@ -1,0 +1,188 @@
+---
+title: "612Project"
+author: "Eli Schaub"
+date: "3/12/2021"
+output: word_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# STAT612 Project Proposal
+```{r}
+library(tidyverse)
+library(ggplot2)
+```
+
+```{r}
+hcrime<-read.csv("Hate Crimes Open Data_4.csv", header = T)
+head(hcrime)
+```
+
+```{r}
+table(hcrime$Report.Year)
+```
+
+```{r}
+table(hcrime$Month)
+```
+
+```{r}
+table(hcrime$District)
+```
+
+```{r}
+table(hcrime$Type.of.Hate.Bias)
+```
+
+```{r}
+table(hcrime$Targeted.Group)
+```
+
+```{r}
+table(hcrime$Top.Offense.Type)
+```
+
+```{r}
+hcrime%>%
+  filter(Month==12 | Month<3)
+```
+
+```{r}
+ggplot(hcrime, mapping = aes(x=Report.Year))+
+  geom_bar()
+```
+
+```{r}
+ggplot(hcrime, mapping = aes(x=Month))+
+  geom_bar()
+```
+
+```{r}
+ggplot(hcrime, mapping = aes(x=District))+
+  geom_bar()
+```
+
+```{r}
+ggplot(hcrime, mapping = aes(x=Type.of.Hate.Bias))+
+  geom_bar()+
+  theme(axis.text.x = element_text(angle = 90))
+```
+
+```{r}
+ggplot(hcrime, mapping = aes(x=Targeted.Group))+
+  geom_bar()+
+  theme(axis.text.x = element_text(angle = 90))
+```
+
+```{r}
+ggplot(hcrime, mapping = aes(x=Top.Offense.Type))+
+  geom_bar()+
+  theme(axis.text.x = element_text(angle = 90))
+```
+
+```{r}
+hcrime$Season=with(hcrime, ifelse(Month>2 & Month<6, "Spring", 
+                                  ifelse(Month>5 & Month<9, "Summer",
+                                         ifelse(Month>8 & Month<12, "Fall", "Winter"))))
+hcrime$Season
+```
+
+```{r}
+head(hcrime)
+```
+
+```{r}
+ggplot(hcrime, mapping = aes(x=Season))+
+  geom_bar()
+```
+
+```{r}
+ggplot(hcrime, mapping = aes(x=Report.Year, color=Targeted.Group))+
+  geom_bar()
+```
+
+```{r}
+hcrime$Targeted.Group=trimws(hcrime$Targeted.Group)
+```
+
+```{r}
+ggplot(hcrime, mapping = aes(x=Report.Year, color=Targeted.Group))+
+  geom_bar()
+```
+
+```{r}
+hcrime$Type.of.Hate.Bias=trimws(hcrime$Type.of.Hate.Bias)
+```
+
+```{r}
+hcrime%>%
+  filter(Report.Year>2016 & (Targeted.Group=="Black" | Targeted.Group=="African" | Targeted.Group=="Black/African"))
+```
+
+```{r}
+hcrime%>%
+  filter(Report.Year<2017 & (Targeted.Group=="Black" | Targeted.Group=="African" | Targeted.Group=="Black/African"))
+```
+
+```{r}
+hcrime%>%
+  filter(Report.Year>2016)
+```
+
+```{r}
+hcrime%>%
+  filter(Report.Year<2017)
+```
+
+```{r}
+summary(hcrime)
+```
+
+```{r}
+hcrime%>%
+  filter(Type.of.Hate.Bias=="Race" | Type.of.Hate.Bias=="Ethnicity/National Origin")->hcrimerace
+```
+
+```{r}
+ggplot(hcrimerace, mapping = aes(x=Targeted.Group))+
+  geom_bar()+
+  theme(axis.text.x = element_text(angle = 90))
+```
+
+```{r}
+ggplot(hcrimerace, mapping = aes(x=Report.Year, fill=Targeted.Group))+
+  geom_bar()
+```
+
+```{r}
+hcrimerace%>%
+  filter(Report.Year>2016)
+```
+
+```{r}
+hcrimerace%>%
+  filter(Report.Year<2017)
+```
+
+```{r}
+hcrimerace%>%
+  filter((Targeted.Group=="Asian" | Targeted.Group=="Chinese") & Report.Year<2020)
+```
+
+```{r}
+hcrimerace%>%
+  filter((Targeted.Group=="Asian" | Targeted.Group=="Chinese") & Report.Year==2020)
+```
+
+```{r}
+hcrimerace%>%
+  filter(Report.Year<2020)
+```
+
+```{r}
+hcrimerace%>%
+  filter(Report.Year==2020)
+```
+

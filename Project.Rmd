@@ -1,0 +1,74 @@
+---
+title: "Project"
+author: "Sha Lu"
+date: "3/13/2021"
+output: html_document
+---
+
+
+```{r}
+glimpse(Hate.Crimes.Open.Data_new)
+
+
+str(Hate.Crimes.Open.Data_new)
+```
+```{r}
+unique(Hate.Crimes.Open.Data_new$Type.of.Hate.Bias)
+unique(Hate.Crimes.Open.Data_new$Top.Offense.Type)
+```
+```{r}
+Hate.Crimes.Open.Data_new %>% 
+  filter(Report.Year == 2013 | Report.Year == 2014| Report.Year == 2015|Report.Year == 2016) -> Obama_admin
+
+Hate.Crimes.Open.Data_new %>% 
+  filter(Report.Year == 2017 | Report.Year == 2018| Report.Year == 2019|Report.Year == 2020) -> Trump_admin
+```
+
+```{r}
+Obama_admin %>% 
+  filter(Type.of.Hate.Bias == "Race") %>% #62
+  filter(Targeted.Group == "Black")  %>% #31
+  group_by(Report.Year) %>% 
+  mutate(num_of_year = n()) -> Obama_admin_black
+  
+ggplot(Obama_admin_black, mapping = aes(x= Report.Year, y = num_of_year)) +
+    geom_line() +
+    xlab("Year") +
+    ylab("Number of violence towards Black")
+
+
+```
+
+```{r}
+Trump_admin %>% 
+  filter(Type.of.Hate.Bias == "Race") %>% #163
+  filter(Targeted.Group == "Black") %>% #111
+  group_by(Report.Year) %>% 
+  mutate(num_of_year = n()) -> Trump_admin_black
+  
+ggplot(Trump_admin_black, mapping = aes(x= Report.Year, y = num_of_year)) +
+    geom_line() +
+    xlab("Year") +
+    ylab("Number of violence towards Black")
+
+```
+
+```{r}
+Hate.Crimes.Open.Data_new %>% 
+  filter(Targeted.Group == "Asian" | Targeted.Group == "Chinese")  #25 towards asian-american & chinese
+Hate.Crimes.Open.Data_new %>% 
+  filter(Targeted.Group == "Asian" | Targeted.Group == "Chinese" ) %>% 
+  filter(Report.Year == "2020") # 3 after 2020
+Hate.Crimes.Open.Data_new %>% 
+  filter(Report.Year == "2020")
+```
+```{r}
+res <- prop.test(x=c(22, 3), n=c(975, 132))
+res
+res$p.value
+res2 <- prop.test(x=c(129,39), n=c(717,390))
+res2
+qnorm(0.0005556)
+
+```
+
